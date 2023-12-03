@@ -37,7 +37,6 @@ func main() {
 				}
 			}
 		}
-		fmt.Printf("The numbers in %s are: %v\n", inp, numbers)
 		calibrationNumber := fmt.Sprintf("%c%c", numbers[0], numbers[len(numbers)-1])
 		sum += helpers.Atoi(calibrationNumber)
 	}
