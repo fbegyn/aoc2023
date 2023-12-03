@@ -7,6 +7,11 @@ import (
 	"github.com/fbegyn/aoc2023/go/helpers"
 )
 
+var (
+	 schematic map[helpers.Point]int
+	 t map[helpers.Point][]helpers.Point
+)
+
 func main() {
 
 	file := os.Args[1]
@@ -15,9 +20,10 @@ func main() {
 	var x, y int64
 	x, y = 0, 0
 	//schematicStr := map[helpers.Point]rune{}
-	schematic := map[helpers.Point]int{}
+	schematic = map[helpers.Point]int{}
 	symbolIndex := []helpers.Point{}
 	numberTracker, numberTrackerInd := []rune{}, []helpers.Point{}
+	t = map[helpers.Point][]helpers.Point{}
 
 	// initialise stream of runes from the schematic
 	go helpers.StreamRunes(file, runeCh)
@@ -36,6 +42,7 @@ func main() {
 		} else if (r == '.' || r == 10) {
 			for _, p := range numberTrackerInd {
 				schematic[p] = helpers.Atoi(string(numberTracker))
+				t[p] = numberTrackerInd
 			}
 			numberTracker = []rune{}
 			numberTrackerInd = []helpers.Point{}
@@ -48,64 +55,88 @@ func main() {
 		}
 
 	}
-	fmt.Println(symbolIndex)
-	fmt.Println(schematic)
 
+	fmt.Println(schematic)
 	s := 0
 	for _, p := range symbolIndex {
-		s += LookPartNumber(schematic, p)
+		s += LookPartNumber(p)
 	}
-	fmt.Println(s)
+	fmt.Println(schematic)
+	fmt.Printf("Sum of part numbers is %d\n", s)
 }
 
-func LookPartNumber(schematic map[helpers.Point]int, p helpers.Point) int {
+func LookPartNumber(p helpers.Point) int {
 	fmt.Println(p)
 	sum := 0
 	// check center of the symbol
 	cuk, cdk := false, false
-	if cu, ok := schematic[helpers.Point{p.X, p.Y-1}]; ok {
-		fmt.Println("center up")
+	cuc := helpers.Point{p.X, p.Y-1}
+	if cu, ok := schematic[cuc]; ok {
 		cuk = ok
 		fmt.Println(cu)
 		sum += cu
+		for _, v := range t[cuc] {
+			delete(schematic, v)
+		}
 	}
-	if cd, ok := schematic[helpers.Point{p.X, p.Y+1}]; ok {
-		fmt.Println("center down")
+	cdc := helpers.Point{p.X, p.Y+1}
+	if cd, ok := schematic[cdc]; ok {
 		cdk = ok
 		fmt.Println(cd)
 		sum += cd
+		for _, v := range t[cdc] {
+			delete(schematic, v)
+		}
 	}
 	// check left of the symbol
-	if lu, ok := schematic[helpers.Point{p.X-1, p.Y-1}]; ok && ok != cuk {
-		fmt.Println("left up")
+	luc := helpers.Point{p.X-1, p.Y-1}
+	if lu, ok := schematic[luc]; ok && ok != cuk {
 		fmt.Println(lu)
 		sum += lu
+		for _, v := range t[luc] {
+			delete(schematic, v)
+		}
 	}
-	if l, ok := schematic[helpers.Point{p.X-1, p.Y}]; ok {
-		fmt.Println("left")
+	lc := helpers.Point{p.X-1, p.Y}
+	if l, ok := schematic[lc]; ok {
 		fmt.Println(l)
 		sum += l
+		for _, v := range t[lc] {
+			delete(schematic, v)
+		}
 	}
-	if ld, ok := schematic[helpers.Point{p.X-1, p.Y+1}]; ok && ok != cdk {
-		fmt.Println("left down")
+	ldc := helpers.Point{p.X-1, p.Y+1}
+	if ld, ok := schematic[ldc]; ok && ok != cdk {
 		fmt.Println(ld)
 		sum += ld
+		for _, v := range t[ldc] {
+			delete(schematic, v)
+		}
 	}
 	// check right of the symbol
-	if ru, ok := schematic[helpers.Point{p.X+1, p.Y-1}]; ok && ok != cuk {
-		fmt.Println("right up")
+	ruc := helpers.Point{p.X+1, p.Y-1}
+	if ru, ok := schematic[ruc]; ok && ok != cuk {
 		fmt.Println(ru)
 		sum += ru
+		for _, v := range t[ruc] {
+			delete(schematic, v)
+		}
 	}
-	if r, ok := schematic[helpers.Point{p.X+1, p.Y}]; ok {
-		fmt.Println("right")
+	rc := helpers.Point{p.X+1, p.Y}
+	if r, ok := schematic[rc]; ok {
 		fmt.Println(r)
 		sum += r
+		for _, v := range t[rc] {
+			delete(schematic, v)
+		}
 	}
-	if rd, ok := schematic[helpers.Point{p.X+1, p.Y+1}]; ok && ok != cdk {
-		fmt.Println("right down")
+	rdc := helpers.Point{p.X+1, p.Y+1}
+	if rd, ok := schematic[rdc]; ok && ok != cdk {
 		fmt.Println(rd)
 		sum += rd
+		for _, v := range t[rdc] {
+			delete(schematic, v)
+		}
 	}
 	return sum
 }
