@@ -96,6 +96,21 @@ func Sum[T Number](slice []T) (sum T) {
 	return
 }
 
+func SumMap[T Number](slice map[string]T) (sum T) {
+	for _, e := range slice {
+		sum += e
+	}
+	return
+}
+
+func MultMap[T Number](slice map[string]T) (sum T) {
+	sum = 1
+	for _, e := range slice {
+		sum *= e
+	}
+	return
+}
+
 // SumOfFloat64Array sums all float64 in the array
 func SumOfFloat64Array(test []float64) (result float64) {
 	for _, v := range test {
