@@ -96,6 +96,14 @@ func Sum[T Number](slice []T) (sum T) {
 	return
 }
 
+func Mult[T Number](slice []T) (mult T) {
+        mult = 1
+	for _, e := range slice {
+		mult *= e
+	}
+	return
+}
+
 func SumMap[T Number](slice map[string]T) (sum T) {
 	for _, e := range slice {
 		sum += e
