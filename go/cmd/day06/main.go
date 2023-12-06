@@ -31,9 +31,6 @@ func main() {
 		distance = append(distance, d)
 	}
 
-	fmt.Println(timing)
-	fmt.Println(distance)
-
 	margin := []int{}
 
 	for i := range timing {
@@ -53,13 +50,5 @@ func main() {
 		margin = append(margin, int(maxSpeed-minSpeed+1))
 	}
 
-	fmt.Println(margin)
 	fmt.Println(helpers.Mult(margin))
 }
-
-//func calculateMinSpeed(d, t int) {
-//	minSpeed := math.Ceil(float64(d) / float64(t))
-//	minTime := math.Ceil(float64(d) / float64(minSpeed))
-//
-//	fmt.Println(minSpeed, minTime)
-//}
